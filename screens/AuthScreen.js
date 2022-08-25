@@ -113,7 +113,7 @@ import {
                 {isLoginScreen ? "Login" : "Register"}
             </Text>
           )}
-        </TouchableOpacity>w
+        </TouchableOpacity>
   
         <TouchableOpacity
           onPress={() => {
