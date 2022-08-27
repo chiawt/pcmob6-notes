@@ -39,6 +39,11 @@ export default function NotesScreenHome() {
       </TouchableOpacity>
     );
   }
+
+  // isLoading = true
+  // {isLoading && <ActivityIndicator />} same as {isLoading ? <ActivityIndicator /> : <View/>} 
+  // then it will show the ActivityIndicator.
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>notes</Text>
