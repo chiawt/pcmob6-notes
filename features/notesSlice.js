@@ -65,6 +65,8 @@ const notesSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = API_STATUS.fulfilled;
         // Add any fetched posts to the array
+        // action.payload refers to the response.data.
+        // example of response data {id: 1, title: 'Hello', content: 'World'}
         state.posts = state.posts.concat(action.payload);
       })
       .addCase(fetchPosts.rejected, (state, action) => {
