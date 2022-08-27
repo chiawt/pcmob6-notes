@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import Animated, { SlideInLeft, SlideOutRight } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
 import { API_STATUS, NOTES_SCREEN } from "../constants";
 import { fetchPosts } from "../features/notesSlice";
@@ -31,19 +32,24 @@ export default function NotesScreenHome() {
 
   function renderItem({ item }) {
     return (
-      <TouchableOpacity style={styles.noteCard} onPress={() => navigation.navigate(NOTES_SCREEN.Details, item)}>
-        <Text style={styles.noteCardTitle}>{item.title}</Text>
-        <Text style={styles.noteCardBodyText}>
-          {item.content.substring(0, 120)}
-        </Text>
-      </TouchableOpacity>
+      <Animated.View
+        entering={SlideInLeft.delay(item.index * 100 )}
+        exiting={SlideOutRight.delay(300)}
+      >
+        <TouchableOpacity style={styles.noteCard} onPress={() => navigation.navigate(NOTES_SCREEN.Details, item)}>
+          <Text style={styles.noteCardTitle}>{item.title}</Text>
+          <Text style={styles.noteCardBodyText}>
+            {item.content.substring(0, 120)}
+          </Text>
+        </TouchableOpacity>
+      </Animated.View>
     );
   }
 
   // isLoading = true
   // {isLoading && <ActivityIndicator />} same as {isLoading ? <ActivityIndicator /> : <View/>} 
   // then it will show the ActivityIndicator.
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>notes</Text>

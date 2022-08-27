@@ -1,7 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { API, API_CREATE, API_POSTS, API_STATUS } from "../constants";
+import { API_STATUS } from "../constants";
 import {
   collection,
   deleteDoc,
@@ -28,8 +26,8 @@ const initialState = {
 
 export const fetchPosts = createAsyncThunk("notes/fetchPosts", async () => {
   const querySnapshot = await getDocs(collection(db, "notes"));
-  const notes = querySnapshot.docs.map((doc) => {
-    return { id: doc.id, ...doc.data() };
+  const notes = querySnapshot.docs.map((doc, index) => {
+    return { id: doc.id, ...doc.data(), index };
   });
   return notes;
 });
@@ -48,8 +46,8 @@ export const fetchPosts = createAsyncThunk("notes/fetchPosts", async () => {
 export const addNewPost = createAsyncThunk(
   "notes/addNewPost",
   async (newPost) => {
-      await setDoc(doc(db, "notes", newPost.id), newPost);
-      return newPost;
+    await setDoc(doc(db, "notes", newPost.id), newPost);
+    return newPost;
   }
 );
 

@@ -5,13 +5,22 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Keyboard,
+  LayoutAnimation,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  UIManager,
   View,
 } from "react-native";
 import { API, API_LOGIN, API_SIGNUP, HOME_STACK } from "../constants";
+
+if (
+  Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 export default function AuthScreen() {
   const navigation = useNavigation();
@@ -52,6 +61,9 @@ export default function AuthScreen() {
         setLoading(false);
         console.log(error.response);
         setErrorText(error.response.data.description);
+      } finally {
+        setLoading(false);
+        LayoutAnimation.spring();
       }
     }
   }
@@ -70,8 +82,10 @@ export default function AuthScreen() {
     } catch (error) {
       console.log(error.response);
       setErrorText(error.response.data.description);
+    } finally {
+      setLoading(false);
+      LayoutAnimation.spring();
     }
-    setLoading(false);
   }
   return (
     <View style={styles.container}>
@@ -97,7 +111,7 @@ export default function AuthScreen() {
       {!isLoginScreen && (
         <TextInput
           style={styles.inputView}
-          placeholder="Password confirm"
+          placeholder="Password Confirm"
           secureTextEntry={true}
           value={confirmPassword}
           onChangeText={(pw) => setConfirmPassword(pw)}
@@ -105,8 +119,10 @@ export default function AuthScreen() {
       )}
 
       <TouchableOpacity
-        style={styles.button}
+        style={loading ? styles.buttonLoading : styles.button}
         onPress={async () => {
+          LayoutAnimation.spring();
+          setErrorText("");
           isLoginScreen ? await login() : await signUp();
         }}
       >
@@ -121,6 +137,7 @@ export default function AuthScreen() {
 
       <TouchableOpacity
         onPress={() => {
+          LayoutAnimation.easeInEaseOut();
           setIsLoginScreen(!isLoginScreen);
           setErrorText("");
         }}
@@ -167,6 +184,12 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     borderRadius: 15,
     width: "100%",
+  },
+  buttonLoading: {
+    backgroundColor: "black",
+    borderRadius: 15,
+    width: "20%",
+    marginHorizontal: "40%",
   },
   buttonText: {
     textAlign: "center",
