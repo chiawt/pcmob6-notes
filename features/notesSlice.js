@@ -119,12 +119,11 @@ const notesSlice = createSlice({
         state.posts.push(action.payload);
       })
       .addCase(updatePostThunk.fulfilled, (state, action) => {
-        const { id, title, content } = action.payload;
-        const existingPost = state.posts.find((post) => post.id === id);
-        if (existingPost) {
-          existingPost.title = title;
-          existingPost.content = content;
-        }
+        const { id } = action.payload;
+        const posts = state.posts;
+        const post = posts.find((post) => post.id === id);
+        const postIndex = posts.indexOf(post);
+        if (~postIndex) posts[postIndex] = action.payload;
       })
       .addCase(deletePostThunk.fulfilled, (state, action) => {
         const id = action.payload;
