@@ -15,6 +15,10 @@ import { fetchPosts } from "../features/notesSlice";
 export default function NotesScreenHome() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  // state.notes = { posts: [],
+  // status: API_STATUS.idle,
+  // error: null,
+  // }}
   const posts = useSelector((state) => state.notes.posts);
   const notesStatus = useSelector((state) => state.notes.status);
   const isLoading = notesStatus === API_STATUS.pending;
