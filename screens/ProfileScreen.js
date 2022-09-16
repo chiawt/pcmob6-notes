@@ -44,13 +44,13 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>profile</Text>
-      <Text style={{ fontSize: 20, fontWeight: "700", marginBottom: 10 }}>
-        your user name: {username}
+      <Text style={styles.title}>Profile</Text>
+      <Text style={{ fontSize: 20, fontWeight: "700", marginBottom: 10, color: "white" }}>
+        User Name: {username}
       </Text>
       <Image
         source={{ uri: photoUri ?? imgPlaceholder }}
-        style={{ height: 120, width: 120, borderRadius: 3, marginBottom: 20 }}
+        style={{ height: 120, width: 120, borderRadius: 20, borderWidth: 3, borderColor: "white", marginBottom: 20 }}
       />
 
       <TouchableOpacity
@@ -78,18 +78,21 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 100,
+    backgroundColor: "#000",
+    paddingTop: 30,
     padding: 25,
   },
   title: {
     fontWeight: "bold",
     fontSize: 40,
+    color: "white",
     marginBottom: 20,
   },
   outlinedButton: {
     borderRadius: 3,
-    borderWidth: 1,
+    borderWidth: 2,
+    borderColor: "gray",
+    color: "white",
     width: 120,
   },
   outlinedButtonText: {
@@ -97,10 +100,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 12,
     padding: 15,
-    color: "black",
+    color: "white",
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     borderRadius: 15,
     width: "100%",
   },
@@ -109,6 +112,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 17,
     padding: 20,
-    color: "white",
+    color: "black",
   },
 });

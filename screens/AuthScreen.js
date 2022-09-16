@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   ActivityIndicator,
   Keyboard,
@@ -90,19 +91,23 @@ export default function AuthScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {isLoginScreen ? "Login to your account" : "Register new account"}
+        {isLoginScreen ? "Login to your account" : "Sign up new account"}
       </Text>
+
+      <TouchableOpacity style={styles.iconbutton}>
+          <FontAwesome name={"user-circle-o"} size={120} color={"white"}/>
+        </TouchableOpacity>
 
       <TextInput
         style={styles.inputView}
-        placeholder="Email"
+        placeholder="Enter your email address"
         value={username}
         onChangeText={(username) => setUsername(username)}
       />
 
       <TextInput
         style={styles.inputView}
-        placeholder="Password"
+        placeholder="Enter your password"
         secureTextEntry={true}
         value={password}
         onChangeText={(pw) => setPassword(pw)}
@@ -130,7 +135,7 @@ export default function AuthScreen() {
           <ActivityIndicator style={styles.buttonText} />
         ) : (
           <Text style={styles.buttonText}>
-            {isLoginScreen ? "Login" : "Register"}
+            {isLoginScreen ? "Login" : "Sign up"}
           </Text>
         )}
       </TouchableOpacity>
@@ -143,7 +148,7 @@ export default function AuthScreen() {
         }}
       >
         <Text style={styles.switchText}>
-          {isLoginScreen ? "No account? Sign up" : "Have account? Register"}
+          {isLoginScreen ? "No account? Sign up" : "Have account? Log In"}
         </Text>
       </TouchableOpacity>
 
@@ -158,6 +163,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "gray",
   },
+  iconbutton: {
+    alignItems: "center",
+    padding: 20
+  },
   errorText: {
     marginTop: 20,
     fontSize: 15,
@@ -165,14 +174,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 100,
+    backgroundColor: "#000",
+    paddingTop: 40,
     padding: 25,
   },
   title: {
     fontWeight: "bold",
-    fontSize: 40,
-    marginBottom: 50,
+    fontSize: 28,
+    color: "white",
+    marginBottom: 10,
   },
   inputView: {
     backgroundColor: "#F1F0F5",
@@ -181,12 +191,15 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     borderRadius: 15,
-    width: "100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: "80%",
   },
   buttonLoading: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     borderRadius: 15,
     width: "20%",
     marginHorizontal: "40%",
@@ -196,6 +209,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 17,
     padding: 20,
-    color: "white",
+    color: "black",
   },
 });

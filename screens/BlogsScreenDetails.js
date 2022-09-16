@@ -56,7 +56,7 @@ export default function NotesScreenDetails() {
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesome name={"arrow-left"} size={24} color={"black"} />
+          <FontAwesome name={"arrow-left"} size={24} color={"white"} />
         </TouchableOpacity>
 
         <View style={{ flex: 1 }} />
@@ -74,12 +74,12 @@ export default function NotesScreenDetails() {
           <FontAwesome
             name={"pencil"}
             size={24}
-            color={editable ? "forestgreen" : "black"}
+            color={editable ? "forestgreen" : "white"}
           />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => deletePost(id)} style={{ marginLeft: 15 }}>
-          <FontAwesome name={"trash"} size={24} color={"black"} />
+          <FontAwesome name={"trash"} size={24} color={"white"} />
         </TouchableOpacity>
       </View>
       <TextInput
@@ -110,31 +110,35 @@ export default function NotesScreenDetails() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 60,
+    backgroundColor: "#000",
+    paddingTop: 30,
     padding: 25,
   },
   noteTitle: {
     fontSize: 24,
     fontWeight: "600",
+    color: "white",
     marginTop: 30,
     marginBottom: 25,
   },
   noteBody: {
     fontSize: 15,
     fontWeight: "400",
+    color: "white",
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     borderRadius: 15,
-    width: "100%",
-    marginBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: "50%",
   },
   buttonText: {
     textAlign: "center",
     fontWeight: "400",
     fontSize: 17,
     padding: 20,
-    color: "white",
+    color: "black",
   },
 });

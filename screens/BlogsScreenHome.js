@@ -10,10 +10,10 @@ import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Animated, { SlideInLeft, SlideOutRight } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
-import { API_STATUS, NOTES_SCREEN } from "../constants";
+import { API_STATUS, BLOGS_SCREEN } from "../constants";
 import { fetchPosts } from "../features/notesSlice";
 
-export default function NotesScreenHome() {
+export default function BlogsScreenHome() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   // state.notes = { posts: [],
@@ -36,7 +36,7 @@ export default function NotesScreenHome() {
         entering={SlideInLeft.delay(item.index * 100 )}
         exiting={SlideOutRight.delay(300)}
       >
-        <TouchableOpacity style={styles.noteCard} onPress={() => navigation.navigate(NOTES_SCREEN.Details, item)}>
+        <TouchableOpacity style={styles.noteCard} onPress={() => navigation.navigate(BLOGS_SCREEN.Details, item)}>
           <Text style={styles.noteCardTitle}>{item.title}</Text>
           <Text style={styles.noteCardBodyText}>
             {item.content.substring(0, 120)}
@@ -46,13 +46,9 @@ export default function NotesScreenHome() {
     );
   }
 
-  // isLoading = true
-  // {isLoading && <ActivityIndicator />} same as {isLoading ? <ActivityIndicator /> : <View/>} 
-  // then it will show the ActivityIndicator.
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>notes</Text>
+      <Text style={styles.title}>Travel Blogs</Text>
 
       {isLoading && <ActivityIndicator />}
 
@@ -63,7 +59,7 @@ export default function NotesScreenHome() {
       />
 
       <View style={{ flex: 1 }} />
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(NOTES_SCREEN.Add)}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(BLOGS_SCREEN.Add)}>
         <Text style={styles.buttonText}>Add Note</Text>
       </TouchableOpacity>
     </View>
@@ -73,7 +69,7 @@ export default function NotesScreenHome() {
 const styles = StyleSheet.create({
   noteCard: {
     borderColor: "gray",
-    borderWidth: 1,
+    borderWidth: 3,
     padding: 15,
     borderRadius: 5,
     marginBottom: 15,
@@ -81,33 +77,39 @@ const styles = StyleSheet.create({
   noteCardTitle: {
     fontSize: 13,
     fontWeight: "500",
+    color: "white",
     marginBottom: 7,
   },
   noteCardBodyText: {
     fontSize: 12,
     fontWeight: "300",
+    color: "white",
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 100,
+    backgroundColor: "#000",
+    paddingTop: 30,
     padding: 25,
   },
   title: {
     fontWeight: "bold",
     fontSize: 40,
+    color: "white",
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     borderRadius: 15,
-    width: "100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: "50%",
   },
   buttonText: {
     textAlign: "center",
     fontWeight: "400",
     fontSize: 17,
     padding: 20,
-    color: "white",
+    color: "black",
   },
 });

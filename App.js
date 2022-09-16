@@ -4,8 +4,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, StatusBar, StyleSheet, View } from "react-native";
 import HomeStack from "./components/HomeStack";
-import { AUTH_SCREEN, HOME_STACK } from "./constants";
+import { AUTH_SCREEN, HOME_STACK, FRONT_SCREEN } from "./constants";
 import AuthScreen from "./screens/AuthScreen";
+import FrontScreen from "./screens/FrontScreen";
 const Stack = createStackNavigator();
 import { Provider } from "react-redux";
 import store from "./store";
@@ -42,12 +43,13 @@ function AppSource() {
     <NavigationContainer>
       <StatusBar />
       <Stack.Navigator
-        initialRouteName={loggedIn ? HOME_STACK : AUTH_SCREEN}
+        initialRouteName={loggedIn ? HOME_STACK : FRONT_SCREEN}
         screenOptions={{
           animationEnabled: false,
           headerShown: false,
         }}
       >
+        <Stack.Screen component={FrontScreen} name={FRONT_SCREEN} />
         <Stack.Screen component={AuthScreen} name={AUTH_SCREEN} />
         <Stack.Screen component={HomeStack} name={HOME_STACK} />
       </Stack.Navigator>
