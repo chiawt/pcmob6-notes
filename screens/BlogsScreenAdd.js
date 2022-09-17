@@ -13,13 +13,15 @@ import {
 import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { addNewPost } from "../features/notesSlice";
+import { CAMERA_SCREEN } from "../constants";
 
 export default function NotesScreenAdd() {
   const navigation = useNavigation();
   const [noteTitle, setNoteTitle] = useState("");
-  const [noteBody, setNoteBody] = useState("");
+  const [noteSubtitle, setnoteSubtitle] = useState("");
+  const [noteBody, setnoteBody] = useState("");
   const dispatch = useDispatch();
-  const canSave = [noteTitle, noteBody].every(Boolean);
+  const canSave = [noteTitle, noteSubtitle].every(Boolean);
 
   async function savePost() {
     if (canSave) {
@@ -27,7 +29,8 @@ export default function NotesScreenAdd() {
         const post = {
           id: nanoid(),
           title: noteTitle,
-          content: noteBody,
+          content: noteSubtitle,
+          detail: noteBody,
         };
         await dispatch(addNewPost(post));
       } catch (error) {
@@ -48,16 +51,29 @@ export default function NotesScreenAdd() {
       </TouchableOpacity>
       <TextInput
         style={styles.noteTitle}
-        placeholder={"note title"}
+        placeholder={"Country / Places of Interest"}
         value={noteTitle}
         onChangeText={(text) => setNoteTitle(text)}
         selectionColor={"gray"}
       />
       <TextInput
+        style={styles.noteSubtitle}
+        placeholder={"Dates (Month-Year)"}
+        value={noteSubtitle}
+        onChangeText={(text) => setnoteSubtitle(text)}
+        selectionColor={"gray"}
+        multiline={true}
+      />
+      <TouchableOpacity
+        style={styles.uploadButton}
+        onPress={() => navigation.navigate(CAMERA_SCREEN)}>
+        <Text style={styles.uploadButtonText}>Upload Photo</Text>
+      </TouchableOpacity>
+      <TextInput
         style={styles.noteBody}
-        placeholder={"Add your notes"}
+        placeholder={"Tell us your feeling?"}
         value={noteBody}
-        onChangeText={(text) => setNoteBody(text)}
+        onChangeText={(text) => setnoteBody(text)}
         selectionColor={"gray"}
         multiline={true}
       />
@@ -80,13 +96,45 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "600",
     color: "white",
-    marginTop: 30,
-    marginBottom: 25,
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  noteSubtitle: {
+    fontSize: 15,
+    fontWeight: "400",
+    color: "white",
+    marginBottom: 10,
+  },
+  uploadButton: {
+    borderRadius: 3,
+    borderWidth: 2,
+    borderColor: "gray",
+    color: "white",
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: "40%",
+    height: "40%"
+  },
+  uploadButtonText: {
+    textAlign: "center",
+    fontWeight: "600",
+    fontSize: 12,
+    padding: 15,
+    color: "white",
   },
   noteBody: {
     fontSize: 15,
     fontWeight: "400",
     color: "white",
+    borderWidth: 1,
+    borderColor: "white",
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: "75%",
+    height: "30%"
   },
   button: {
     backgroundColor: "white",
@@ -100,7 +148,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "400",
     fontSize: 17,
-    padding: 20,
+    padding: 15,
     color: "black",
   },
 });

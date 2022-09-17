@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "400",
     fontSize: 17,
-    padding: 20,
+    padding: 15,
     color: "black",
   },
 });

@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AUTH_SCREEN, API, API_WHOAMI, CAMERA_SCREEN } from "../constants";
+import { FRONT_SCREEN, API, API_WHOAMI, CAMERA_SCREEN } from "../constants";
 import axios from "axios";
 
 const imgPlaceholder = "https://picsum.photos/200";
@@ -64,7 +64,7 @@ export default function ProfileScreen() {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          navigation.navigate(AUTH_SCREEN);
+          navigation.navigate(FRONT_SCREEN);
           AsyncStorage.removeItem("token");
           setUsername("loading...");
         }}

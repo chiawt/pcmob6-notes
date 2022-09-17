@@ -1,10 +1,12 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Image,
   Text,
   TextInput,
   TouchableOpacity,
@@ -13,23 +15,33 @@ import {
 import { useDispatch } from "react-redux";
 import { deletePostThunk, updatePostThunk } from "../features/notesSlice";
 
+const imgPlaceholder = "https://picsum.photos/200";
+
 export default function NotesScreenDetails() {
   const route = useRoute();
   const titleInputRef = useRef();
   const navigation = useNavigation();
   const params = route.params;
   const [noteTitle, setNoteTitle] = useState(params.title);
-  const [noteBody, setNoteBody] = useState(params.content);
+  const [noteSubtitle, setnoteSubtitle] = useState(params.content);
+  const [noteBody, setnoteBody] = useState(params.detail);
   const [editable, setEditable] = useState(false);
+  const [photoUri, setPhotoUri] = useState(null);
   const dispatch = useDispatch();
   const id = params.id;
+
+  async function loadPhoto() {
+    const photo = await AsyncStorage.getItem("photo_uri");
+    setPhotoUri(photo);
+  }
 
   async function updatePost(id) {
     try {
       const updatedPost = {
         id,
         title: noteTitle,
-        content: noteBody,
+        content: noteSubtitle,
+        detail: noteBody,
       };
       await dispatch(updatePostThunk(updatedPost));
     } catch (error) {
@@ -48,6 +60,19 @@ export default function NotesScreenDetails() {
       navigation.goBack();
     }
   }
+
+  
+  useEffect(() => {
+    const removeListener = navigation.addListener("focus", () => {
+      loadPhoto();
+    });
+    
+    loadPhoto();
+    return () => {
+      removeListener();
+    };
+  }, []);
+
 
   return (
     <KeyboardAvoidingView
@@ -92,10 +117,23 @@ export default function NotesScreenDetails() {
         ref={titleInputRef}
       />
       <TextInput
-        style={styles.noteBody}
+        style={styles.noteSubtitle}
         placeholder={"Add your notes"}
+        value={noteSubtitle}
+        onChangeText={(text) => setnoteSubtitle(text)}
+        selectionColor={"gray"}
+        editable={editable}
+        multiline={true}
+      />
+      <Image
+        source={{ uri: photoUri ?? imgPlaceholder }}
+        style={styles.imageContainer}
+      />
+      <TextInput
+        style={styles.noteBody}
+        placeholder={"Tell us your feeling?"}
         value={noteBody}
-        onChangeText={(text) => setNoteBody(text)}
+        onChangeText={(text) => setnoteBody(text)}
         selectionColor={"gray"}
         editable={editable}
         multiline={true}
@@ -118,13 +156,37 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "600",
     color: "white",
-    marginTop: 30,
-    marginBottom: 25,
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  noteSubtitle: {
+    fontSize: 15,
+    fontWeight: "400",
+    color: "white",
+    marginBottom: 10,
+  },
+  imageContainer: {
+    borderRadius: 3,
+    borderWidth: 2,
+    borderColor: "gray",
+    color: "white",
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: "40%",
+    height: "40%"
   },
   noteBody: {
     fontSize: 15,
     fontWeight: "400",
     color: "white",
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: "75%",
+    height: "30%"
   },
   button: {
     backgroundColor: "white",
@@ -138,7 +200,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "400",
     fontSize: 17,
-    padding: 20,
+    padding: 15,
     color: "black",
   },
 });
