@@ -15,8 +15,6 @@ import { useDispatch } from "react-redux";
 import { deletePostThunk, updatePostThunk } from "../features/notesSlice";
 import * as ImagePicker from 'expo-image-picker';
 
-const imgPlaceholder = "https://picsum.photos/200";
-
 export default function NotesScreenDetails() {
   const route = useRoute();
   const titleInputRef = useRef();
