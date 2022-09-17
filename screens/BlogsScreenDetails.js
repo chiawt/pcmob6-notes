@@ -1,7 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useEffect, useRef, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +13,7 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { deletePostThunk, updatePostThunk } from "../features/notesSlice";
+import * as ImagePicker from 'expo-image-picker';
 
 const imgPlaceholder = "https://picsum.photos/200";
 
@@ -26,14 +26,10 @@ export default function NotesScreenDetails() {
   const [noteSubtitle, setnoteSubtitle] = useState(params.content);
   const [noteBody, setnoteBody] = useState(params.detail);
   const [editable, setEditable] = useState(false);
-  const [photoUri, setPhotoUri] = useState(null);
+  const [photoUri, setPhotoUri] = useState(params.url);
+  console.log(params.url)
   const dispatch = useDispatch();
   const id = params.id;
-
-  async function loadPhoto() {
-    const photo = await AsyncStorage.getItem("photo_uri");
-    setPhotoUri(photo);
-  }
 
   async function updatePost(id) {
     try {
@@ -42,6 +38,7 @@ export default function NotesScreenDetails() {
         title: noteTitle,
         content: noteSubtitle,
         detail: noteBody,
+        url: photoUri,
       };
       await dispatch(updatePostThunk(updatedPost));
     } catch (error) {
@@ -61,18 +58,25 @@ export default function NotesScreenDetails() {
     }
   }
 
-  
-  useEffect(() => {
-    const removeListener = navigation.addListener("focus", () => {
-      loadPhoto();
-    });
-    
-    loadPhoto();
-    return () => {
-      removeListener();
-    };
-  }, []);
 
+  // This function is triggered when the "Select an image" button pressed
+  const showImagePicker = async () => {
+    // Ask the user for the permission to access the media library 
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your photos!");
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync();
+
+    // Explore the result
+    console.log(result);
+
+    if (!result.cancelled) {
+      setPhotoUri(result.uri);
+    }
+  }
 
   return (
     <KeyboardAvoidingView
@@ -125,10 +129,19 @@ export default function NotesScreenDetails() {
         editable={editable}
         multiline={true}
       />
-      <Image
-        source={{ uri: photoUri ?? imgPlaceholder }}
-        style={styles.imageContainer}
-      />
+      <View style={styles.imageContainer}>
+        {
+        <Image
+          source={{ uri: photoUri }}
+          style={styles.image}
+        />
+        }
+      </View>
+      <TouchableOpacity
+        style={styles.uploadButton}
+        onPress={showImagePicker}  title="Select an image">
+        <Text style={styles.uploadButtonText}>Upload New Photo</Text>
+      </TouchableOpacity>
       <TextInput
         style={styles.noteBody}
         placeholder={"Tell us your feeling?"}
@@ -156,7 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "600",
     color: "white",
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 10,
   },
   noteSubtitle: {
@@ -165,7 +178,26 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 10,
   },
+  image: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 20,
+    borderWidth: 3,
+    borderColor: "white",
+    marginBottom: 5,
+    resizeMode: 'cover'
+  },
   imageContainer: {
+    borderRadius: 3,
+    borderWidth: 2,
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: "30%",
+    height: "35%"
+  },
+  uploadButton: {
     borderRadius: 3,
     borderWidth: 2,
     borderColor: "gray",
@@ -174,8 +206,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    width: "40%",
-    height: "40%"
+  },
+  uploadButtonText: {
+    textAlign: "center",
+    fontWeight: "600",
+    fontSize: 12,
+    padding: 10,
+    color: "white",
   },
   noteBody: {
     fontSize: 15,
